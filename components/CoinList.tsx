@@ -2,52 +2,35 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Image, StyleSheet, ScrollView, RefreshControl, FlatList, SafeAreaView, ImageSourcePropType } from 'react-native';
 import { Text, View } from './Themed';
-import * as Icons from '../assets/icons/index'
-
-import { getTickerInformation, IKrakenResponse } from '../api/kraken';
+import { getMarkets, Coin } from '../api/coinGecko';
 
 export default function CoinList() {
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [data, setData] = useState<IKrakenResponse>();
-  const [pairs, setPairs] = useState(['BTCUSD', 'ETHUSD', 'ADAUSD', 'DOGEUSD', 'MATICUSD', 'BCHUSD', 'LTCUSD', 'XLMUSD']);
+  const [data, setData] = useState<Coin[]>([]);
 
   const date = new Date();
   const day = date.toDateString();
   const time = date.toLocaleTimeString();
 
-  var pairMap: Record<string, string> = {
-    'BTCUSD': 'XXBTZUSD',
-    'ETHUSD': 'XETHZUSD',
-    'ADAUSD': 'ADAUSD',
-    'DOGEUSD': 'XDGUSD',
-    'MATICUSD': 'MATICUSD',
-    'BCHUSD': 'BCHUSD',
-    'LTCUSD': 'XLTCZUSD',
-    'XLMUSD': 'XXLMZUSD'
-  }
-
-  var iconMap: Record<string, ImageSourcePropType> = {
-    'BTCUSD': Icons.btc,
-    'ETHUSD': Icons.eth,
-    'ADAUSD': Icons.ada,
-    'DOGEUSD': Icons.doge,
-    'MATICUSD': Icons.matic,
-    'BCHUSD': Icons.bch,
-    'LTCUSD': Icons.ltc,
-    'XLMUSD': Icons.xlm
-  }
-
   function renderPairs() {
-    return (pairs.map((pair, index) =>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} key={index}>
-        <Image style={styles.tinyLogo} source={iconMap[pair]}></Image>
+    var filteredData: any = data.slice(0, 50);
+    return (filteredData.map((pair: Coin) =>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} key={pair.id}>
+        <Image style={styles.tinyLogo} source={{
+          uri: pair.image,
+        }}></Image>
         <Text
-          key={index}
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
           darkColor="rgba(255,255,255,0.8)">
-          {pair.replace('USD', '')}: ${data != undefined ? JSON.stringify(parseFloat(data.result[pairMap[pair]].c[0])) : ""}
+          {pair.symbol.toUpperCase()}
+        </Text>
+        <Text
+          style={styles.price}
+          lightColor="rgba(0,0,0,0.8)"
+          darkColor="rgba(255,255,255,0.8)">
+          {pair.current_price}
         </Text>
       </View>
     ))
@@ -59,7 +42,7 @@ export default function CoinList() {
   }, []);
 
   async function getData() {
-    getTickerInformation(pairs)
+    getMarkets()
       .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
@@ -110,6 +93,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
     textAlign: 'left',
+  },
+  price: {
+    fontSize: 17,
+    lineHeight: 24,
+    textAlign: 'right',
+    marginLeft: 10
   },
   helpContainer: {
     marginTop: 15,
