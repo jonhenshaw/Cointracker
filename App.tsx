@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { StoreProvider, StoreContext } from './context/StoreProvider';
+import { StoreProvider, StoreContext } from './store/StoreProvider';
 import LoginScreen from './screens/LoginScreen';
 
 export default function App() {

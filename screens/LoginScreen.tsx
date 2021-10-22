@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Text, Button, ScrollView, SafeAreaView } from 'react-native';
 
-import { useStoreContext } from '../context/StoreProvider'
+import { useStoreContext } from '../store/StoreProvider'
 
 interface LoginCredentials {
   username: string,
