@@ -5,7 +5,7 @@ import { getMarkets, Coin } from '../api/coinGecko';
 
 import Table from './Table'
 
-import { useStoreContext } from '../context/StoreProvider'
+import { useStoreContext } from '../store/StoreProvider'
 
 export default function CoinList() {
   const [isLoading, setLoading] = useState(true);
