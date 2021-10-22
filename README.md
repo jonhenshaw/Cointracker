@@ -10,7 +10,7 @@ App is viewable at `https://expo.dev/@jon309/cointracker`
 npm install -g react ts-node typescript expo
 ```
 
-Navigate to the `/login` folder and run `ts-node server.js` to run the authentication server
+Navigate to the `/server` folder and run `ts-node server.ts` to run the authentication server
 
 From the root folder, `npm install` and `expo start` to run
 
