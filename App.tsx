@@ -1,11 +1,13 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import { StoreProvider, StoreContext } from './context/StoreProvider';
+import LoginScreen from './screens/LoginScreen';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -13,12 +15,20 @@ export default function App() {
 
   if (!isLoadingComplete) {
     return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
-    );
   }
+
+  return (
+    <StoreProvider>
+      <StoreContext.Consumer>
+        {context => {
+          return context.token == ""
+            ? <LoginScreen />
+            : <SafeAreaProvider>
+                <Navigation colorScheme={colorScheme} />
+                <StatusBar />
+              </SafeAreaProvider>
+        }}
+      </StoreContext.Consumer>
+    </StoreProvider>
+  )
 }
