@@ -2,8 +2,6 @@
 
 The following is a mobile application to track cryptocurrency market data inspired by CoinGecko, CoinMarketCap, and many others. The project is a Work In Progress, and is not fully functional yet.
 
-App is viewable at `https://expo.dev/@jon309/cointracker`
-
 ## Getting Started
 
 ```
