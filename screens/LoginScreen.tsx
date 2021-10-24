@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Text, Button, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Button, SafeAreaView, Alert } from 'react-native';
 
 import { useStoreContext } from '../store/StoreProvider';
 
@@ -30,10 +30,19 @@ export default function LoginScreen(props: {}) {
     if (!user || !password) return;
     try {
       const { token } = await loginUser({ username: user, password });
+      if (!token) {
+        throw new Error('Authentication failed.');
+      }
       store.setUsername(user);
       store.setToken(token);
-    } catch (error) {
-      // Show error
+    } catch (error: any) {
+      Alert.alert('Error', error?.message || 'Something went wrong.', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK' },
+      ]);
     }
   };
 
@@ -53,6 +62,7 @@ export default function LoginScreen(props: {}) {
           </View>
           <View>
             <TextInput
+              secureTextEntry
               style={styles.input}
               placeholder='Password'
               autoCompleteType='password'
