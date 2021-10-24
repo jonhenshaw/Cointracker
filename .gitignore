@@ -21,6 +21,9 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# build
+dist
+
 # Gradle
 /build/
 /packages/react-native-codegen/android/build/
