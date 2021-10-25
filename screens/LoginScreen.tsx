@@ -9,7 +9,7 @@ interface LoginCredentials {
 }
 
 async function loginUser(credentials: LoginCredentials) {
-  const response = await fetch('http://192.168.0.139:8080/login', {
+  const response = await fetch('http://127.0.0.1:8080/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -27,23 +27,20 @@ export default function LoginScreen(props: {}) {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const user = username.trim();
-    if (!user || !password) return;
-    try {
-      const { token } = await loginUser({ username: user, password });
-      if (!token) {
-        throw new Error('Authentication failed.');
-      }
-      store.setUsername(user);
-      store.setToken(token);
-    } catch (error: any) {
-      Alert.alert('Error', error?.message || 'Something went wrong.', [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        { text: 'OK' },
-      ]);
+
+    if (!user || !password) {
+      alert("Please enter username and password.");
+      return;
     }
+
+    const response = await loginUser({ username: user, password });
+
+    if (!response.ok) {
+      throw new Error('Authentication failed.');
+    }
+
+    store.setUsername(user);
+    store.setToken(response.token);
   };
 
   return store.token == '' ? (
