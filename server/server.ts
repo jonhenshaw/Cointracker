@@ -21,6 +21,6 @@ app.use('/login', (req: Request, res: Response) => {
   }
 });
 
-var server = app.listen(8080, "127.0.0.1", () =>  {
+var server = app.listen(8080, () =>  {
   console.log(`API is running on ${server.address().address}:${server.address().port}`)
 });

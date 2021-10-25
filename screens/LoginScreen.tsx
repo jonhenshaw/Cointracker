@@ -9,7 +9,7 @@ interface LoginCredentials {
 }
 
 async function loginUser(credentials: LoginCredentials) {
-  const response = await fetch('http://127.0.0.1:8080/login', {
+  const response = await fetch('http://192.168.0.139:8080/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function LoginScreen(props: {}) {
 
     const response = await loginUser({ username: user, password });
 
-    if (!response.ok) {
+    if (!response) {
       throw new Error('Authentication failed.');
     }
 
