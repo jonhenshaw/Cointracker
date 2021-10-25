@@ -1,18 +1,26 @@
-const express = require('express');
-const cors = require('cors')
+import express, { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import cors from 'cors';
+
 const app = express();
 
-const bcrypt = require('bcrypt')
+// hide X-Powered-By header
+app.disable('x-powered-by');
 
-app.use(express.json())
-
+app.use(express.json());
 app.use(cors());
 
-app.use('/login', (req: any, res: any) => {
-  bcrypt.hash(req.body.password, 10, (err: Error, hash: string) => {
-    console.log(hash)
-  })
-  res.send({token: 'test123'});
+app.use('/login', (req: Request, res: Response) => {
+  try {
+    const { password } = req.body;
+    const hash = bcrypt.hashSync(password, 10);
+    console.log('hash:', hash);
+    res.status(200).json({ token: 'test123' });
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
 });
 
-app.listen(8080, () => console.log('API is running on http://192.168.0.139:8080/login'));
+var server = app.listen(8080, "127.0.0.1", () =>  {
+  console.log(`API is running on ${server.address().address}:${server.address().port}`)
+});

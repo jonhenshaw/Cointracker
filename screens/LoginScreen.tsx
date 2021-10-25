@@ -1,57 +1,81 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Text, Button, ScrollView, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Button, SafeAreaView, Alert } from 'react-native';
 
-import { useStoreContext } from '../store/StoreProvider'
+import { useStoreContext } from '../store/StoreProvider';
 
 interface LoginCredentials {
-  username: string,
-  password: string
+  username: string;
+  password: string;
 }
 
 async function loginUser(credentials: LoginCredentials) {
-  var token = fetch('http://192.168.0.139:8080/login', {
+  const response = await fetch('http://127.0.0.1:8080/login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials)
-  }).then(data => data.json())
-
-  return await token;
+    body: JSON.stringify(credentials),
+  });
+  return await response.json();
 }
 
 export default function LoginScreen(props: {}) {
   const store = useStoreContext();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    await loginUser({ username, password })
-      .then(result => {
-        store.setUsername(username)
-        store.setToken(result.token)
-      });
-  }
+    const user = username.trim();
 
-  return store.token == "" ? (
+    if (!user || !password) {
+      alert("Please enter username and password.");
+      return;
+    }
+
+    const response = await loginUser({ username: user, password });
+
+    if (!response.ok) {
+      throw new Error('Authentication failed.');
+    }
+
+    store.setUsername(user);
+    store.setToken(response.token);
+  };
+
+  return store.token == '' ? (
     <SafeAreaView style={styles.view}>
       <View style={styles.login}>
         <Text style={styles.loginText}>Please log in</Text>
         <View style={{ width: 200 }}>
           <View>
-            <TextInput style={styles.input} placeholder="Username" autoCompleteType="username" value={username} onChangeText={setUsername} />
+            <TextInput
+              style={styles.input}
+              placeholder='Username'
+              autoCompleteType='username'
+              value={username}
+              onChangeText={setUsername}
+            />
           </View>
           <View>
-            <TextInput style={styles.input} placeholder="Password" autoCompleteType="password" value={password} onChangeText={setPassword} />
+            <TextInput
+              secureTextEntry
+              style={styles.input}
+              placeholder='Password'
+              autoCompleteType='password'
+              value={password}
+              onChangeText={setPassword}
+            />
           </View>
         </View>
         <View style={{ borderWidth: 1, borderRadius: 20, borderColor: 'white' }}>
-          <Button title="Submit" onPress={handleSubmit} />
+          <Button title='Submit' onPress={handleSubmit} />
         </View>
       </View>
     </SafeAreaView>
-  )  : <View></View>
+  ) : (
+    <View></View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -59,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   login: {
     display: 'flex',
@@ -68,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitButton: {
-    color: 'red'
+    color: 'red',
   },
   input: {
     height: 40,
@@ -76,9 +100,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     padding: 10,
-    color: 'white'
+    color: 'white',
   },
   loginText: {
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});
