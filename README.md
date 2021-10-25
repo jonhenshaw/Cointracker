@@ -8,11 +8,19 @@ The following is a mobile application to track cryptocurrency market data inspir
 yarn global add react ts-node typescript expo
 ```
 
-From the root folder, `yarn install`
+# Authentication Server
+
+There are two ways of running the authentication server:
+
+`yarn start:server`
+
+or
 
 Navigate to the `/server` folder and run `ts-node server.ts` to run the authentication server
 
-From the root folder, `yarn start` to run
+# Run
+
+From the root folder, run `yarn install` `yarn start` to run
 
 Use the Expo Go app on iOS store on Google Play store to access the app on a mobile device
 
