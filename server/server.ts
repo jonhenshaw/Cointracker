@@ -1,6 +1,8 @@
-import express, { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import cors from 'cors';
+const express =require('express');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
+
+import { Request, Response } from 'express'
 
 const app = express();
 
