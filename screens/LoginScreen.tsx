@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, TextInput, Text, Button, SafeAreaView, Alert } from 'react-native';
 
 import { useStoreContext } from '../store/StoreProvider';

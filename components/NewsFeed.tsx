@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Linking, RefreshControl } from 'react-native';
 import { Text, View } from './Themed';
 

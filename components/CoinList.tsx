@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Text, Image, StyleSheet, ScrollView, RefreshControl, FlatList, SafeAreaView, ImageSourcePropType } from 'react-native';
 import { getMarkets, Coin } from '../api/coinGecko';
 
