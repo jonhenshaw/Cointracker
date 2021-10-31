@@ -9,9 +9,18 @@ interface TableProps {
   filterAmount: number
 }
 
+const sortData = (data:Coin[], sortCat:String) => {
+
+
+  return data
+
+}
+
 export const isPositive = (number: number): boolean => number >= 0 ? true : false;
 
 export default function Table(props: TableProps) {
+
+  const [sortCat,setSortCat] = React.useState("none")
 
   function lineBreak() {
     return (
@@ -30,19 +39,19 @@ export default function Table(props: TableProps) {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Text style={styles.symbol}>Coin
+          <Text onPress={()=>{setSortCat("coin")}} style={styles.symbol}>Coin
           </Text>
         </View>
         <View style={{ width: 90 }}>
-          <Text style={styles.price}>Price
+          <Text onPress={()=>{setSortCat("price")}} style={styles.price}>Price
           </Text>
         </View>
         <View style={{ width: 70 }}>
-          <Text style={styles.percentage}>24hr
+          <Text onPress={()=>{setSortCat("24hr")}} style={styles.percentage}>24hr
           </Text>
         </View>
         <View>
-          <Text style={styles.marketCap}>Market Cap
+          <Text onPress={()=>{setSortCat("cap")}} style={styles.marketCap}>Market Cap
           </Text>
         </View>
       </View>
@@ -50,6 +59,12 @@ export default function Table(props: TableProps) {
   }
 
   function renderPairs() {
+
+    let coinListData = props.data.slice(0, props.filterAmount)
+
+    coinListData = sortData(coinListData, sortCat)
+    
+    
     return (props.data.slice(0, props.filterAmount).map((pair: Coin) =>
       <View style={{ flexDirection: 'row', alignItems: 'center' }} key={pair.id}>
         <View style={{ width: 45, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
