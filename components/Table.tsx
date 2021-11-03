@@ -34,19 +34,19 @@ export default function Table(props: TableProps) {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Text onPress={()=>{props.setSortCat("coin");console.log('coin')}} style={styles.symbol}>Coin
+          <Text onPress={()=>{props.setSortCat("coin")}} style={styles.symbol}>Coin
           </Text>
         </View>
         <View style={{ width: 90 }}>
-          <Text onPress={()=>{props.setSortCat("price");console.log('price')}} style={styles.price}>Price
+          <Text onPress={()=>{props.setSortCat("price")}} style={styles.price}>Price
           </Text>
         </View>
         <View style={{ width: 70 }}>
-          <Text onPress={()=>{props.setSortCat("24hr");console.log('24hr')}} style={styles.percentage}>24hr
+          <Text onPress={()=>{props.setSortCat("24hr")}} style={styles.percentage}>24hr
           </Text>
         </View>
         <View style={{ width: 90 }}>
-          <Text onPress={()=>{props.setSortCat("cap");console.log('cap')}} style={styles.marketCap}>Market Cap
+          <Text onPress={()=>{props.setSortCat("cap")}} style={styles.marketCap}>Market Cap
           </Text>
         </View>
       </View>
