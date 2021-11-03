@@ -10,10 +10,32 @@ interface TableProps {
 }
 
 const sortData = (data:Coin[], sortCat:String) => {
-
-
+  
+  switch(sortCat) {
+     case 'coin': {
+      data.sort((a, b) => {
+        var nameA = a.name.toUpperCase(); 
+        var nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+     }
+     case 'price': {
+       data.sort((a,b) => { return a.current_price - b.current_price} )
+     }
+     case '24hr': {
+       data.sort((a,b) => { return a.price_change_percentage_24h - b.price_change_percentage_24h}  )
+     }
+     case 'cap': {
+      data.sort((a,b) => { return a.market_cap - b.market_cap}  )
+     }
+  }
   return data
-
 }
 
 export const isPositive = (number: number): boolean => number >= 0 ? true : false;
@@ -65,7 +87,7 @@ export default function Table(props: TableProps) {
     coinListData = sortData(coinListData, sortCat)
     
     
-    return (props.data.slice(0, props.filterAmount).map((pair: Coin) =>
+    return (coinListData.map((pair: Coin) =>
       <View style={{ flexDirection: 'row', alignItems: 'center' }} key={pair.id}>
         <View style={{ width: 45, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Image style={styles.tinyLogo} source={{
