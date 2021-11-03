@@ -3,16 +3,20 @@ import { useEffect } from 'react';
 import { Image, StyleSheet, ScrollView, RefreshControl, FlatList, SafeAreaView, ImageSourcePropType } from 'react-native';
 import { Text, View } from './Themed';
 import { getMarkets, Coin } from '../api/coinGecko';
+import { sortData } from '../util/sortData';
 
 interface TableProps {
   data: Coin[],
-  filterAmount: number
+  filterAmount: number,
+  sortCat: String
+  setSortCat: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const isPositive = (number: number): boolean => number >= 0 ? true : false;
 
 export default function Table(props: TableProps) {
 
+  
   function lineBreak() {
     return (
       <View
@@ -26,23 +30,23 @@ export default function Table(props: TableProps) {
     )
   }
 
-  function renderHeaders() {
+ function renderHeaders() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Text style={styles.symbol}>Coin
+          <Text onPress={()=>{props.setSortCat("coin")}} style={styles.symbol}>Coin
           </Text>
         </View>
         <View style={{ width: 90 }}>
-          <Text style={styles.price}>Price
+          <Text onPress={()=>{props.setSortCat("price")}} style={styles.price}>Price
           </Text>
         </View>
         <View style={{ width: 70 }}>
-          <Text style={styles.percentage}>24hr
+          <Text onPress={()=>{props.setSortCat("24hr")}} style={styles.percentage}>24hr
           </Text>
         </View>
-        <View>
-          <Text style={styles.marketCap}>Market Cap
+        <View style={{ width: 90 }}>
+          <Text onPress={()=>{props.setSortCat("cap")}} style={styles.marketCap}>Market Cap
           </Text>
         </View>
       </View>
@@ -50,7 +54,11 @@ export default function Table(props: TableProps) {
   }
 
   function renderPairs() {
-    return (props.data.slice(0, props.filterAmount).map((pair: Coin) =>
+
+    let coinListData = props.data.slice(0, props.filterAmount)
+    coinListData = sortData(coinListData, props.sortCat)
+
+    return (coinListData.map((pair: Coin) =>
       <View style={{ flexDirection: 'row', alignItems: 'center' }} key={pair.id}>
         <View style={{ width: 45, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Image style={styles.tinyLogo} source={{
