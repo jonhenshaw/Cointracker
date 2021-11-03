@@ -3,47 +3,20 @@ import { useEffect } from 'react';
 import { Image, StyleSheet, ScrollView, RefreshControl, FlatList, SafeAreaView, ImageSourcePropType } from 'react-native';
 import { Text, View } from './Themed';
 import { getMarkets, Coin } from '../api/coinGecko';
+import { sortData } from '../util/sortData';
 
 interface TableProps {
   data: Coin[],
-  filterAmount: number
-}
-
-const sortData = (data:Coin[], sortCat:String) => {
-  
-  switch(sortCat) {
-     case 'coin': {
-      data.sort((a, b) => {
-        var nameA = a.name.toUpperCase(); 
-        var nameB = b.name.toUpperCase();
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-     }
-     case 'price': {
-       data.sort((a,b) => { return a.current_price - b.current_price} )
-     }
-     case '24hr': {
-       data.sort((a,b) => { return a.price_change_percentage_24h - b.price_change_percentage_24h}  )
-     }
-     case 'cap': {
-      data.sort((a,b) => { return a.market_cap - b.market_cap}  )
-     }
-  }
-  return data
+  filterAmount: number,
+  sortCat: String
+  setSortCat: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const isPositive = (number: number): boolean => number >= 0 ? true : false;
 
 export default function Table(props: TableProps) {
 
-  const [sortCat,setSortCat] = React.useState("none")
-
+  
   function lineBreak() {
     return (
       <View
@@ -57,23 +30,23 @@ export default function Table(props: TableProps) {
     )
   }
 
-  function renderHeaders() {
+ function renderHeaders() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Text onPress={()=>{setSortCat("coin")}} style={styles.symbol}>Coin
+          <Text onPress={()=>{props.setSortCat("coin");console.log('coin')}} style={styles.symbol}>Coin
           </Text>
         </View>
         <View style={{ width: 90 }}>
-          <Text onPress={()=>{setSortCat("price")}} style={styles.price}>Price
+          <Text onPress={()=>{props.setSortCat("price");console.log('price')}} style={styles.price}>Price
           </Text>
         </View>
         <View style={{ width: 70 }}>
-          <Text onPress={()=>{setSortCat("24hr")}} style={styles.percentage}>24hr
+          <Text onPress={()=>{props.setSortCat("24hr");console.log('24hr')}} style={styles.percentage}>24hr
           </Text>
         </View>
-        <View>
-          <Text onPress={()=>{setSortCat("cap")}} style={styles.marketCap}>Market Cap
+        <View style={{ width: 90 }}>
+          <Text onPress={()=>{props.setSortCat("cap");console.log('cap')}} style={styles.marketCap}>Market Cap
           </Text>
         </View>
       </View>
@@ -83,10 +56,8 @@ export default function Table(props: TableProps) {
   function renderPairs() {
 
     let coinListData = props.data.slice(0, props.filterAmount)
+    coinListData = sortData(coinListData, props.sortCat)
 
-    coinListData = sortData(coinListData, sortCat)
-    
-    
     return (coinListData.map((pair: Coin) =>
       <View style={{ flexDirection: 'row', alignItems: 'center' }} key={pair.id}>
         <View style={{ width: 45, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

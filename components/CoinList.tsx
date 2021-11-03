@@ -36,6 +36,8 @@ export default function CoinList() {
     getData();
   }, []);
 
+  const [sortCat,setSortCat] = React.useState("none")
+
   return (
     <ScrollView
       refreshControl={
@@ -48,6 +50,8 @@ export default function CoinList() {
       <Table
         data={data}
         filterAmount={filterAmount}
+        sortCat={sortCat}
+        setSortCat={setSortCat}
         ></Table>
     </ScrollView>
   );

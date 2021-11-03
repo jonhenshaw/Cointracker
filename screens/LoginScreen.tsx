@@ -10,7 +10,7 @@ interface LoginCredentials {
 }
 
 async function loginUser(credentials: LoginCredentials) {
-  const response = await fetch('http://192.168.0.139:8080/login', {
+  const response = await fetch('http://192.168.1.90:8080/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
